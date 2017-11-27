@@ -7,9 +7,11 @@ export default class ImgButton extends Component {
 	render() {
 		return(
 			<View>
-				<TouchableOpacity style={styles.buttonContainer}>
+				<RectangleButton 
+					style={styles.buttonContainer}>
+					title={this.props.purpose}
           			<Text style={styles.buttonText}>{this.props.purpose}</Text>
-        		</TouchableOpacity>
+        		</RectangleButton>
 			</View>
 		)
 	};
