@@ -20,6 +20,7 @@ export default class StatusScreen extends React.Component {
     return (
         <View style={styles.container}>
           <Text style={styles.statusTxt}>Destination: {params.dest}</Text>
+          <Text style={styles.statusTxt}>Distance to Destination: {params.dist}</Text>
           <Text style={styles.statusTxt}>Time Remaining: {params.ETA}</Text>
         </View>
     );

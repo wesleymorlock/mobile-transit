@@ -25,21 +25,25 @@ export default class FavoritesScreen extends React.Component {
   render() {
     const { params } = this.props.navigation.state;
     const { navigate } = this.props.navigation;
+    const titleGuy = this._stationBtn;
+    console.log(titleGuy);
 
     return (
         <View style={styles.container}>
           <Text>Favorites:</Text>
           <FlatList 
             style={styles.tblRows}
-            data={[{key: FavoritedStations.stationList.stations[0]}, {key: 'Penn Station'}]}
+            data={[{key: 'Oyster Bay'}, {key: 'Penn Station'}]}
             renderItem={({item}) => <Button 
               style={ styles.rowText } 
               title='{item.key}'
-              onPress={() => navigate(
+              ref={component => this._stationBtn = component}
+              onPress={(response) => navigate(
                 "Status", 
                 { 
+                  dest: "oyster bay",
+                  dist: "20 miles",
                   ETA: "30 minutes away!",
-                  dest: this.title,
                 }
               )}> </Button>} />
         </View>

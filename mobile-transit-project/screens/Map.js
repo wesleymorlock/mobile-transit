@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { StackNavigator, headerMode, navigationOptions } from 'react-navigation';
 import MapView from 'react-native-maps'
-import MapMarkerCallout from './components/MapMarkerCallout'
+import MapMarkerCallout from '../components/MapMarkerCallout'
 
 class MapPage extends React.Component {
   constructor (props) {
@@ -86,7 +86,6 @@ class MapPage extends React.Component {
 
   render() {
     return (
-      const { params } = this.props.navigation.state;
       <View style={styles.container}>
         <MapView
           style={styles.map}
