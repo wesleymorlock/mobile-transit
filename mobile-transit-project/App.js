@@ -17,6 +17,7 @@ import FavoritesScreen from './screens/Favorites';
 import InformationScreen from './screens/Information';
 import ScheduleScreen from './screens/Schedule';
 import SchedulePickerScreen from './screens/SchedulePicker';
+import StatusScreen from './screens/StatusScreen';
 
 const cheerio = require('react-native-cheerio');
 const $ = cheerio.load('<h2 class="title">Hello world</h2>');
@@ -35,4 +36,5 @@ const MTApp = StackNavigator({
   Information: { screen: InformationScreen },
   SchedulePicker: { screen: SchedulePickerScreen },
   Schedule: { screen: ScheduleScreen },
+  Status: { screen: StatusScreen },
 });
