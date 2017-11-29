@@ -3,21 +3,30 @@ import {
   StyleSheet, 
   Text, 
   View
-} from 'react-native';  
+} from 'react-native';
 
-class MapScreen extends React.Component {
-  // Nav options can be defined as a function of the screen's props:
+export default class FavoritesScreen extends React.Component {
   static navigationOptions = {
-    title: 'Map',
+    title: 'Favorites',
   };
 
   render() {
-    // The screen's current route is passed in to `props.navigation.state`:
     const { params } = this.props.navigation.state;
+
     return (
-      <View>
-        <Text>Map</Text>
-      </View>
+        <View>
+          <Text>Favorites</Text>
+          <Picker
+            selectedValue={(this.state && this.state.pickerValue) || 'a'}
+            onValueChange={(value) => {
+              this.setState({pickerValue: value});
+            }} >
+              <Picker.Item label="Grand Central Station" value="GCT" />
+              <Picker.Item label="Oyster Bay" value="OB3" />
+              <Picker.Item label="Oyster Bay" value="OB3" />
+              <Picker.Item label="Penn Station" value="PS" />
+          </Picker>
+        </View>
     );
   }
 }

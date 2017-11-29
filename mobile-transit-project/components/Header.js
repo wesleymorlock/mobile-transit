@@ -7,7 +7,7 @@ export default class Header extends Component {
 		return(
 			<View>
 				<Text style={styles.message}>
-          			Welcome to our App!!
+          			Trains, Trains, and more Trains!!!
         		</Text>
         		<View style={styles.logoContainer}>
 		        	<Image style={styles.logo} source={require('../assets/logo.png')} />

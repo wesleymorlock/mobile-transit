@@ -3,21 +3,23 @@ import { StyleSheet, Text, View, AppRegistry, TextInput, Button } from 'react-na
 
 import { StackNavigator } from 'react-navigation';
 
-import Header from './Header.js';
-import ImgButton from './ImgButton.js';
+import Header from '../components/Header.js';
+import ImgButton from '../components/ImgButton.js';
 
-class HomeScreen extends React.Component {
+export default class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Home',
   };
 
   render() {
     const { navigate } = this.props.navigation;
+
     return (
       <View style={styles.container}>
         <Header />
-        <TextInput placeholder="Just write whatever you want" style={styles.inputField}></TextInput>
+        <TextInput placeholder="Write something about trains here" style={styles.inputField}></TextInput>
         <Button
+          raised
           style={styles.mapBtn}
           onPress={() => navigate('Map')}
           title="Map" />
@@ -31,9 +33,27 @@ class HomeScreen extends React.Component {
           title="Information" />
         <Button
           style={styles.schedBtn}
-          onPress={() => navigate('Schedule')}
+          onPress={() => navigate('SchedulePicker')}
           title="Schedule" />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#abcdef',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  inputField:{
+    height: 50,
+    width: 300,
+    borderColor:'#fff',
+    borderWidth: 1,
+    padding: 10,
+    color: '#fff'
+  },
+});
