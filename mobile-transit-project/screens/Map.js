@@ -133,7 +133,7 @@ export default class MapScreen extends React.Component{
     title: 'Map',
     headerRight: <Button 
       title="Status"
-      onPress={() => navigation.navigate('Status')} />,
+      onPress={() => } />,
   });
 
   render() {
