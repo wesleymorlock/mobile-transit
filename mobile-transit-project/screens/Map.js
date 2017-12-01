@@ -11,11 +11,15 @@ import {
 import { StackNavigator, headerMode, navigationOptions } from 'react-navigation';
 import MapView from 'react-native-maps'
 import MapMarkerCallout from '../components/MapMarkerCallout'
+import StatusScreen from './StatusScreen'
 
 class MapPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      latitude: null,
+      longitude: null,
+      error: null,
       sideBarShowing: false,
       region: {
         latitude: 40.9549774,
@@ -84,6 +88,20 @@ class MapPage extends React.Component {
     }
   }
 
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -103,7 +121,15 @@ class MapPage extends React.Component {
               pinColor='red'
             >
               <MapView.Callout
-                onPress={() => this.props.navigate.navigate('MapDisplay')}>
+                onPress={() => this.props.navigate.navigate(
+                  'Destination',
+                  {
+                    longitude: marker.latlng.longitude, 
+                    latitude: marker.latlng.latitude, 
+                    location: marker.title, 
+                    loclat: this.state.latitude, 
+                    loclong: this.state.longitude
+                  })}>
                 <MapMarkerCallout
                   title={marker.title}
                   description={marker.description}
@@ -122,20 +148,24 @@ const MapS = ( {navigation}) => (
   <MapPage navigate={navigation}/>
 );
 
+const Dest = ( {navigation}) => (
+  <StatusScreen navigate={navigation}/>
+);
+
 const AppNavigation = StackNavigator({
     MapDisplay: {
       screen: MapS,
     }, 
+    Destination: {
+      screen: Dest,
+    }
   })
 
 export default class MapScreen extends React.Component{
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = {
     title: 'Map',
-    headerRight: <Button 
-      title="Status"
-      onPress={() => } />,
-  });
-
+  };
+  
   render() {
     return <AppNavigation />
   }
