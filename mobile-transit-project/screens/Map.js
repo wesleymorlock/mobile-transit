@@ -129,9 +129,12 @@ const AppNavigation = StackNavigator({
   })
 
 export default class MapScreen extends React.Component{
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Map',
-  };
+    headerRight: <Button 
+      title="Status"
+      onPress={() => navigation.navigate('Status')} />,
+  });
 
   render() {
     return <AppNavigation />

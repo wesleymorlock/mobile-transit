@@ -10,42 +10,52 @@ import {
 import { FavoritedStations } from '../globals/FavoritedStations';
 
 export default class FavoritesScreen extends React.Component {
-  static favorites = [];
 
   constructor() {
-        super();
+    super();
 
-        favorites = FavoritedStations.stationList.stations;
-    }
+    this.state = {
+      dest: "",
+      dist: 0,
+      ETA: 0,
+    };
+
+    favorites = FavoritedStations.stationList.stations;
+  };
 
   static navigationOptions = {
     title: 'Favorites',
   };
 
-  render() {
-    const { params } = this.props.navigation.state;
-    const { navigate } = this.props.navigation;
-    const titleGuy = this._stationBtn;
-    console.log(titleGuy);
+  onTap = (obj) => {
 
+    console.log(FavoritedStations.stationList.stations)
+
+    this.state.dest = obj.item.destination;
+    this.state.dist = obj.item.distance;
+    this.state.ETA = obj.item.remainingTime;
+    this.props.navigation.navigate(
+      "Status", 
+      { 
+        dest: this.state.dest,
+        dist: this.state.dist,
+        ETA: this.state.ETA,
+      }
+    );
+  };
+
+  render() {
     return (
         <View style={styles.container}>
-          <Text>Favorites:</Text>
+          <Text style={ styles.headerText }>Favorites:</Text>
           <FlatList 
             style={styles.tblRows}
-            data={[{key: 'Oyster Bay'}, {key: 'Penn Station'}]}
+            data={FavoritedStations.stationList.stations}
             renderItem={({item}) => <Button 
-              style={ styles.rowText } 
-              title='{item.key}'
+              style={ styles.rowText }
+              title={item.destination}
               ref={component => this._stationBtn = component}
-              onPress={(response) => navigate(
-                "Status", 
-                { 
-                  dest: "oyster bay",
-                  dist: "20 miles",
-                  ETA: "30 minutes away!",
-                }
-              )}> </Button>} />
+              onPress={() => this.onTap({item})}> </Button>} />
         </View>
     );
   }
@@ -62,6 +72,12 @@ const styles = StyleSheet.create({
   tblRows: {
     padding: 20,
     width: 300,
+  },
+
+  headerText: {
+    fontSize: 30,
+    paddingTop: 10,
+    paddingBottom: 30
   },
 
   rowText: {
