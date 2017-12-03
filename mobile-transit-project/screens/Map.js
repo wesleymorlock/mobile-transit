@@ -121,7 +121,7 @@ class MapPage extends React.Component {
               pinColor='red'
             >
               <MapView.Callout
-                onPress={() => this.props.navigate.navigate(
+                onPress={() => this.props.navigation.navigate(
                   'Destination',
                   {
                     longitude: marker.latlng.longitude, 
@@ -145,11 +145,11 @@ class MapPage extends React.Component {
 }
 
 const MapS = ( {navigation}) => (
-  <MapPage navigate={navigation}/>
+  <MapPage navigation={navigation}/>
 );
 
 const Dest = ( {navigation}) => (
-  <StatusScreen navigate={navigation}/>
+  <StatusScreen navigation={navigation}/>
 );
 
 const AppNavigation = StackNavigator({

@@ -43,15 +43,17 @@ export default class StatusScreen extends React.Component {
   }
 
   render() {
+    console.log(this.props.navigation);
     const { params } = this.props.navigation.state;
+
     const { navigate } = this.props.navigation;
     const distMeters = geolib.getDistance(
-      {latitude: this.props.navigate.state.params.loclat, longitude: this.props.navigate.state.params.loclong},
-      {latitude: this.props.navigate.state.params.latitude, longitude: this.props.navigate.state.params.longitude}
+      {latitude: this.props.navigation.state.params.loclat, longitude: this.props.navigation.state.params.loclong},
+      {latitude: this.props.navigation.state.params.latitude, longitude: this.props.navigation.state.params.longitude}
     );
 
     let station_image = null
-    let name = this.props.navigate.state.params.location;
+    let name = this.props.navigation.state.params.location;
     if (name == "Auburndale") {
       station_image = <Image style={styles.img} source={require("../assets/images/Auburndale.jpg")}/>;
     } else if (name == "Bayside") {
@@ -75,7 +77,7 @@ export default class StatusScreen extends React.Component {
         <View style={styles.container}>
           <Text style={styles.headerText}>Status Update</Text>
           {station_image}
-          <Text style={styles.statusTxt}>Destination: {this.props.navigate.state.params.location}</Text>
+          <Text style={styles.statusTxt}>Destination: {params.location}</Text>
           <Text style={styles.statusTxt}>Distance to Destination: {miles} miles</Text>
           <Text style={styles.statusTxt}>Time Remaining: {this.calcTime(params.ETA)} </Text>
         </View>
