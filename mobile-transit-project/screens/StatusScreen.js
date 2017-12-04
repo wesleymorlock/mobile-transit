@@ -107,12 +107,8 @@ export default class StatusScreen extends React.Component {
     } else {
       station_image = <Image style={styles.img} source={require("../assets/images/Port Washington.jpg")}/>;
     }
-
     
     const miles = distMeters * 0.00062137;
-
-    console.log("--------------------");
-    console.log(this.state.myLat, this.state.myLong);
 
     return (
         <View style={styles.container}>

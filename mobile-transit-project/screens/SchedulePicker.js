@@ -21,7 +21,6 @@ export default class SchedulePickerScreen extends React.Component {
   handleSearch = ({ navigate }) => {
 
     if (this.state.term === "Albertson") {
-      console.log('made it here');
       this.props.navigation.navigate("Schedule", { station: "44" })
     } else if (this.state.term == "Amagansett") {
       this.props.navigation.navigate('Schedule', { station: "137" })
@@ -272,8 +271,6 @@ export default class SchedulePickerScreen extends React.Component {
     } else if (this.state.term == "Yaphank") {
       this.props.navigation.navigate('Schedule', { station: "78" })
     }
-
-    console.log(this.state.term);
 
     this.props.navigation.navigate("Schedule", { station: this.state.term })
   }
