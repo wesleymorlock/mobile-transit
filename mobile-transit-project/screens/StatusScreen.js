@@ -5,8 +5,10 @@ import {
   View,
   Button,
   Image,
+  Alert,
 } from 'react-native';
-import geolib from 'geolib'
+import geolib from 'geolib';
+import { FavoritedStations } from '../globals/FavoritedStations';
 
 export default class StatusScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -18,6 +20,29 @@ export default class StatusScreen extends React.Component {
 
   constructor() {
     super();
+  }
+
+  addToFavorites = (location, latitude, longitude) => {
+
+    var exists = false;
+
+    for (i = 0; i < FavoritedStations.stationList.stations.length; i++) { 
+      if (location == FavoritedStations.stationList.stations[i].location){
+        exists = true;
+      }
+    }
+
+    if (exists == true){
+      Alert.alert('Already in Favorites');
+    } else {
+      // add to favorites
+      FavoritedStations.stationList.stations.push({location, latitude, longitude});
+
+      // alert
+      Alert.alert(
+        'Added to Favorites'
+      )
+    }
   }
 
   calcTime = (minutes) => {
@@ -45,16 +70,14 @@ export default class StatusScreen extends React.Component {
   render() {
     const { params } = this.props.navigation.state;
 
-    console.log(params.loclat, params.loclong, params.latitude, params.longitude);
+    console.log("params");
+    console.log(params);
 
     const { navigate } = this.props.navigation;
     const distMeters = geolib.getDistance(
       {latitude: params.loclat, longitude: params.loclong},
       {latitude: params.latitude, longitude: params.longitude}
     );
-
-    console.log(distMeters);
-    console.log(params.ETA);
 
     var station_image = null
     var name = params.location;
@@ -74,8 +97,11 @@ export default class StatusScreen extends React.Component {
       station_image = <Image style={styles.img} source={require("../assets/images/Plandome.jpg")}/>;
     } else if (name == "Port Washington") {
       station_image = <Image style={styles.img} source={require("../assets/images/Port Washington.jpg")}/>;
+    } else {
+      station_image = <Image style={styles.img} source={require("../assets/images/Port Washington.jpg")}/>;
     }
 
+    
     const miles = distMeters * 0.00062137;
 
     return (
@@ -83,8 +109,13 @@ export default class StatusScreen extends React.Component {
           <Text style={styles.headerText}>Status Update</Text>
           {station_image}
           <Text style={styles.statusTxt}>Destination: {params.location}</Text>
-          <Text style={styles.statusTxt}>Distance to Destination: {miles} miles</Text>
+          <Text style={styles.statusTxt}>Distance to Destination: {Math.round(miles)} miles</Text>
           <Text style={styles.statusTxt}>Time Remaining: {this.calcTime(params.ETA)} </Text>
+          <Button title="Add to Favorites" onPress={() => this.addToFavorites(
+              params.location,
+              params.latitude,
+              params.longitude
+            )} />
         </View>
     );
   }

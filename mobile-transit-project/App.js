@@ -23,19 +23,6 @@ import StatusScreen from './screens/StatusScreen';
 const cheerio = require('react-native-cheerio');
 const $ = cheerio.load('<h2 class="title">Hello world</h2>');
 
-// Initialize Firebase
-// const firebaseConfig = {
-//   apiKey: "",
-//   authDomain: "",
-//   databaseURL: "",
-//   storageBucket: "",
-// };
-// firebase.initializeApp(firebaseConfig);
-
-// Create a reference with .ref() instead of new Firebase(url)
-// const rootRef = firebase.database().ref();
-// const itemsRef = rootRef.child('items');
-
 export default class App extends React.Component {
   render() {
     return <MTApp />;

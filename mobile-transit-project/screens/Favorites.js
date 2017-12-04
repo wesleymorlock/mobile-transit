@@ -8,19 +8,12 @@ import {
 } from 'react-native';
 
 import { FavoritedStations } from '../globals/FavoritedStations';
+import { SELECTION } from '../globals/Selection';
 
 export default class FavoritesScreen extends React.Component {
 
   constructor() {
     super();
-
-    this.state = {
-      dest: "",
-      dist: 0,
-      ETA: 0,
-    };
-
-    favorites = FavoritedStations.stationList.stations;
   };
 
   static navigationOptions = {
@@ -28,18 +21,17 @@ export default class FavoritesScreen extends React.Component {
   };
 
   onTap = (obj) => {
+    console.log("ssssssss");
+    console.log(obj.item);
 
-    console.log(FavoritedStations.stationList.stations)
-
-    this.state.dest = obj.item.destination;
-    this.state.dist = obj.item.distance;
-    this.state.ETA = obj.item.remainingTime;
     this.props.navigation.navigate(
-      "Status", 
-      { 
-        dest: this.state.dest,
-        dist: this.state.dist,
-        ETA: this.state.ETA,
+      'Status', { 
+        ETA: obj.item.ETA,
+        loclat: obj.item.loclat,
+        loclong: obj.item.loclong,
+        latitude: obj.item.latitude,
+        longitude: obj.item.longitude,
+        location: obj.item.location,
       }
     );
   };
@@ -53,7 +45,7 @@ export default class FavoritesScreen extends React.Component {
             data={FavoritedStations.stationList.stations}
             renderItem={({item}) => <Button 
               style={ styles.rowText }
-              title={item.destination}
+              title={item.location}
               ref={component => this._stationBtn = component}
               onPress={() => this.onTap({item})}> </Button>} />
         </View>

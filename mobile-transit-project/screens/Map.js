@@ -13,14 +13,8 @@ import MapView from 'react-native-maps'
 import MapMarkerCallout from '../components/MapMarkerCallout'
 import StatusScreen from './StatusScreen'
 
-const SELECTION = {
-  location: null,
-  loclat: null,
-  loclong: null,
-  latitude: null,
-  longitude: null,
-  ETA: 0,
-}
+import { SELECTION } from '../globals/Selection';
+import { FavoritedStations } from '../globals/FavoritedStations';
 
 class MapPage extends React.Component {
   constructor (props) {
@@ -100,8 +94,8 @@ class MapPage extends React.Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        SELECTION.latitude = position.coords.latitude;
-        SELECTION.longitude = position.coords.latitude;
+        SELECTION.choice.latitude = position.coords.latitude;
+        SELECTION.choice.longitude = position.coords.latitude;
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -114,21 +108,33 @@ class MapPage extends React.Component {
   }
 
   setSelection = (marker) => {
-    SELECTION.longitude = marker.latlng.longitude;
-    SELECTION.latitude = marker.latlng.latitude;
-    SELECTION.loclat = this.state.latitude;
-    SELECTION.loclong = this.state.longitude;
-    SELECTION.location = marker.title;
+    SELECTION.choice.longitude = marker.latlng.longitude;
+    SELECTION.choice.latitude = marker.latlng.latitude;
+    SELECTION.choice.loclat = this.state.latitude;
+    SELECTION.choice.loclong = this.state.longitude;
+    SELECTION.choice.location = marker.title;
+
+    FavoritedStations.stationList.stations.push({
+      location: SELECTION.choice.location,
+      latitude: SELECTION.choice.latitude,
+      longitude: SELECTION.choice.longitude,
+      ETA: SELECTION.choice.ETA,
+      loclong: SELECTION.choice.loclong,
+      loclat: SELECTION.choice.loclat,
+    });
+
+    console.log("Selection: ");
+    console.log(SELECTION.choice);
 
     this.props.navigation.navigate(
       'Destination',
       {
-        ETA: SELECTION.ETA,
-        longitude: SELECTION.longitude, 
-        latitude: SELECTION.latitude, 
-        location: SELECTION.location, 
-        loclat: SELECTION.loclat, 
-        loclong: SELECTION.loclong
+        ETA: SELECTION.choice.ETA,
+        longitude: SELECTION.choice.longitude, 
+        latitude: SELECTION.choice.latitude, 
+        location: SELECTION.choice.location, 
+        loclat: SELECTION.choice.loclat, 
+        loclong: SELECTION.choice.loclong
       })
   }
 
@@ -188,13 +194,13 @@ export default class MapScreen extends React.Component{
     title: 'Map',
     headerRight: <Button 
       title="Info"
-      onPress={() => navigation.navigate('Status', { 
-        ETA: SELECTION.ETA,
-        location: SELECTION.location,
-        loclat: SELECTION.loclat,
-        loclong: SELECTION.loclong,
-        latitude: SELECTION.latitude,
-        longitude: SELECTION.longitude,
+      onPress={() => navigation.navigate('Destination', { 
+        ETA: SELECTION.choice.ETA,
+        location: SELECTION.choice.location,
+        loclat: SELECTION.choice.loclat,
+        loclong: SELECTION.choice.loclong,
+        latitude: SELECTION.choice.latitude,
+        longitude: SELECTION.choice.longitude,
        })} />
   });
   

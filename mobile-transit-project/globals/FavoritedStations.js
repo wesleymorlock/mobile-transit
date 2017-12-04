@@ -1,21 +1,14 @@
 export class FavoritedStations {
 	static stationList = {
 		stations: [
-		{
-			destination: 'Oyster Bay', 
-			distance: 10, 
-			remainingTime: 12
-		}, 
-		{
-			destination: 'Penn Station', 
-			distance: 5, 
-			remainingTime: 3
-		},
-		{
-			destination: 'Port Jefferson', 
-			distance: 75, 
-			remainingTime: 61
-		}
-		]
+			{
+				location: 'Oyster Bay',
+				latitude: 43.7981,
+				longitude: -73.1145,
+				ETA: 10,
+				loclong: 0,
+				loclat: 0,
+			},
+		]	// shoul consist of location, latitude, and longitude
 	};
 }
