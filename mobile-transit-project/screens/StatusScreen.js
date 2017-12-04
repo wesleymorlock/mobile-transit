@@ -43,17 +43,21 @@ export default class StatusScreen extends React.Component {
   }
 
   render() {
-    console.log(this.props.navigation);
     const { params } = this.props.navigation.state;
+
+    console.log(params.loclat, params.loclong, params.latitude, params.longitude);
 
     const { navigate } = this.props.navigation;
     const distMeters = geolib.getDistance(
-      {latitude: this.props.navigation.state.params.loclat, longitude: this.props.navigation.state.params.loclong},
-      {latitude: this.props.navigation.state.params.latitude, longitude: this.props.navigation.state.params.longitude}
+      {latitude: params.loclat, longitude: params.loclong},
+      {latitude: params.latitude, longitude: params.longitude}
     );
 
-    let station_image = null
-    let name = this.props.navigation.state.params.location;
+    console.log(distMeters);
+    console.log(params.ETA);
+
+    var station_image = null
+    var name = params.location;
     if (name == "Auburndale") {
       station_image = <Image style={styles.img} source={require("../assets/images/Auburndale.jpg")}/>;
     } else if (name == "Bayside") {
@@ -73,6 +77,7 @@ export default class StatusScreen extends React.Component {
     }
 
     const miles = distMeters * 0.00062137;
+
     return (
         <View style={styles.container}>
           <Text style={styles.headerText}>Status Update</Text>
@@ -90,21 +95,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#abcdef',
     justifyContent: 'center',
+    alignItems: 'center',
     paddingLeft: 30,
   },
 
   headerText: {
     textAlign: 'center',
     fontSize: 30,
-    paddingBottom: 100
+    paddingBottom: 10
   },
 
   statusTxt: {
     fontSize: 20,
-    paddingBottom: 30,
+    paddingBottom: 10,
   },
+
   img: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height: 200,
   }
 });

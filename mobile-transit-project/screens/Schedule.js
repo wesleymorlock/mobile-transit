@@ -389,9 +389,11 @@ export default class ScheduleScreen extends React.Component {
   }
 
   render() {
-    const { state } = this.props.navigation;
-    var id = state.params ? state.params.station : "OB1";
-    var stationUrl = this.getUrl(id);
+    const { params } = this.props.navigation.state;
+    var value = params.station;
+    console.log(value);
+    var stationUrl = this.getUrl(value);
+    console.log(value);
 
     return (
       <WebView 

@@ -13,6 +13,15 @@ import MapView from 'react-native-maps'
 import MapMarkerCallout from '../components/MapMarkerCallout'
 import StatusScreen from './StatusScreen'
 
+const SELECTION = {
+  location: null,
+  loclat: null,
+  loclong: null,
+  latitude: null,
+  longitude: null,
+  ETA: 0,
+}
+
 class MapPage extends React.Component {
   constructor (props) {
     super(props)
@@ -91,6 +100,8 @@ class MapPage extends React.Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        SELECTION.latitude = position.coords.latitude;
+        SELECTION.longitude = position.coords.latitude;
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -102,14 +113,33 @@ class MapPage extends React.Component {
     );
   }
 
+  setSelection = (marker) => {
+    SELECTION.longitude = marker.latlng.longitude;
+    SELECTION.latitude = marker.latlng.latitude;
+    SELECTION.loclat = this.state.latitude;
+    SELECTION.loclong = this.state.longitude;
+    SELECTION.location = marker.title;
+
+    this.props.navigation.navigate(
+      'Destination',
+      {
+        ETA: SELECTION.ETA,
+        longitude: SELECTION.longitude, 
+        latitude: SELECTION.latitude, 
+        location: SELECTION.location, 
+        loclat: SELECTION.loclat, 
+        loclong: SELECTION.loclong
+      })
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: 40.7891,
-            longitude: -73.1350,
+            latitude: 40.7966,
+            longitude: -73.7494,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
@@ -121,15 +151,7 @@ class MapPage extends React.Component {
               pinColor='red'
             >
               <MapView.Callout
-                onPress={() => this.props.navigation.navigate(
-                  'Destination',
-                  {
-                    longitude: marker.latlng.longitude, 
-                    latitude: marker.latlng.latitude, 
-                    location: marker.title, 
-                    loclat: this.state.latitude, 
-                    loclong: this.state.longitude
-                  })}>
+                onPress={() => this.setSelection(marker) }>
                 <MapMarkerCallout
                   title={marker.title}
                   description={marker.description}
@@ -162,9 +184,19 @@ const AppNavigation = StackNavigator({
   })
 
 export default class MapScreen extends React.Component{
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Map',
-  };
+    headerRight: <Button 
+      title="Info"
+      onPress={() => navigation.navigate('Status', { 
+        ETA: SELECTION.ETA,
+        location: SELECTION.location,
+        loclat: SELECTION.loclat,
+        loclong: SELECTION.loclong,
+        latitude: SELECTION.latitude,
+        longitude: SELECTION.longitude,
+       })} />
+  });
   
   render() {
     return <AppNavigation />

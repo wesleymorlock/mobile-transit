@@ -39,4 +39,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  menuTxt: {
+    fontSize: 30,
+  }
 });
