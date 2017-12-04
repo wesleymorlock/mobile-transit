@@ -8,8 +8,21 @@ import {
   Alert,
 } from 'react-native';
 import geolib from 'geolib';
+import * as firebase from 'firebase';
 import { FavoritedStations } from '../globals/FavoritedStations';
 import { SELECTION } from '../globals/Selection';
+
+var config = {
+  apiKey: "AIzaSyAgjVKhNLO0wI4pAh5dtmSQ1DpSsimHH3I",
+  authDomain: "mobile-transit-bbdf3.firebaseapp.com",
+  databaseURL: "https://mobile-transit-bbdf3.firebaseio.com/",
+  projectId: "mobile-transit-bbdf3",
+  storageBucket: "mobile-transit-bbdf3.appspot.com",
+  messagingSenderId: "270559937070"
+};
+firebase.initializeApp(config);
+
+var database = firebase.database();
 
 export default class StatusScreen extends React.Component {
   state = {
@@ -37,7 +50,8 @@ export default class StatusScreen extends React.Component {
   }
 
   addToFavorites = (location, latitude, longitude) => {
-    var exists = false;
+
+    // var exists = false;
 
     for (i = 0; i < FavoritedStations.stationList.stations.length; i++) { 
       if (location == FavoritedStations.stationList.stations[i].location){
@@ -45,14 +59,20 @@ export default class StatusScreen extends React.Component {
       }
     }
 
-    if (exists != true){
-      // add to favorites
-      FavoritedStations.stationList.stations.push({location, latitude, longitude});
-    }
+    firebase.database().ref('favorites/' + location).set({
+      station: location,
+      lat: latitude,
+      lon: longitude
+    });
 
     Alert.alert(
         'Added to Favorites'
       )
+  }
+
+  calcETA = (distance) => {
+    var speed = 40;
+    return(distance / speed);
   }
 
   calcTime = (minutes) => {
@@ -61,12 +81,10 @@ export default class StatusScreen extends React.Component {
     if (minutes > 59) {
       var hrs = Math.floor(minutes / 60);
       var mins = (minutes % 60);
-
       var hourStr = hrs.toString() + (hrs == 1 ? " hour" : " hours");
       returnStr += hourStr;
 
       if (mins != 0) {
-
         var minuteStr = ", " + mins.toString() + (mins == 1 ? " minute" : " minutes");
         returnStr += minuteStr;
       }
@@ -80,11 +98,14 @@ export default class StatusScreen extends React.Component {
   render() {
     const { params } = this.props.navigation.state;
     const { navigate } = this.props.navigation;
+    var ETA = 0;
 
     const distMeters = geolib.getDistance(
       {latitude: this.state.myLat, longitude: this.state.myLong},
       {latitude: params.latitude, longitude: params.longitude}
     );
+
+    ETA = this.calcETA(distMeters);
 
     var station_image = null
     var name = params.location;
@@ -110,13 +131,16 @@ export default class StatusScreen extends React.Component {
     
     const miles = distMeters * 0.00062137;
 
+    console.log("-----");
+    console.log(ETA);
+
     return (
         <View style={styles.container}>
           <Text style={styles.headerText}>Status Update</Text>
           {station_image}
           <Text style={styles.statusTxt}>Destination: {params.location}</Text>
           <Text style={styles.statusTxt}>Distance to Destination: {Math.round(miles)} miles</Text>
-          <Text style={styles.statusTxt}>Time Remaining: {this.calcTime(params.ETA)} </Text>
+          <Text style={styles.statusTxt}>Time Remaining: {this.calcTime(ETA)} </Text>
           <Button title="Add to Favorites" onPress={() => this.addToFavorites(
               params.location,
               params.latitude,

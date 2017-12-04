@@ -123,9 +123,6 @@ class MapPage extends React.Component {
       loclat: SELECTION.choice.loclat,
     });
 
-    console.log("Selection: ");
-    console.log(SELECTION.choice);
-
     this.props.navigation.navigate(
       'Destination',
       {

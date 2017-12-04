@@ -14,7 +14,6 @@ export default class StationPicker extends React.Component {
 	}
 
 	render() {
-
 		return (
 			<Picker
 			  style={{

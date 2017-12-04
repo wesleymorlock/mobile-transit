@@ -8,7 +8,6 @@ import {
   Button, 
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-const firebase = require("firebase");
 
 import { FavoritedStations } from './globals/FavoritedStations';
 
@@ -20,6 +19,8 @@ import ScheduleScreen from './screens/Schedule';
 import SchedulePickerScreen from './screens/SchedulePicker';
 import StatusScreen from './screens/StatusScreen';
 
+
+// Initialize Cheerio
 const cheerio = require('react-native-cheerio');
 const $ = cheerio.load('<h2 class="title">Hello world</h2>');
 

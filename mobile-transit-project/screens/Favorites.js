@@ -21,8 +21,6 @@ export default class FavoritesScreen extends React.Component {
   };
 
   onTap = (obj) => {
-    console.log("ssssssss");
-    console.log(obj.item);
 
     this.props.navigation.navigate(
       'Status', { 

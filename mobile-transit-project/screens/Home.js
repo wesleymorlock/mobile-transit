@@ -13,6 +13,7 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
+    var thisVar = 0;
 
     return (
       <View style={styles.container}>
