@@ -17,7 +17,6 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Header />
-        <TextInput placeholder="Write something about trains here" style={styles.inputField}></TextInput>
         <Button
           raised
           style={styles.mapBtn}

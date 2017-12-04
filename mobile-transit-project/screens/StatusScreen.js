@@ -9,8 +9,14 @@ import {
 } from 'react-native';
 import geolib from 'geolib';
 import { FavoritedStations } from '../globals/FavoritedStations';
+import { SELECTION } from '../globals/Selection';
 
 export default class StatusScreen extends React.Component {
+  state = {
+    myLat: 0,
+    myLong: 0,
+  } 
+
   static navigationOptions = ({ navigation }) => ({
     title: 'Status',
     headerRight: <Button 
@@ -20,10 +26,17 @@ export default class StatusScreen extends React.Component {
 
   constructor() {
     super();
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({myLat: position.coords.latitude});
+        this.setState({myLong: position.coords.longitude});
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
   }
 
   addToFavorites = (location, latitude, longitude) => {
-
     var exists = false;
 
     for (i = 0; i < FavoritedStations.stationList.stations.length; i++) { 
@@ -32,17 +45,14 @@ export default class StatusScreen extends React.Component {
       }
     }
 
-    if (exists == true){
-      Alert.alert('Already in Favorites');
-    } else {
+    if (exists != true){
       // add to favorites
       FavoritedStations.stationList.stations.push({location, latitude, longitude});
+    }
 
-      // alert
-      Alert.alert(
+    Alert.alert(
         'Added to Favorites'
       )
-    }
   }
 
   calcTime = (minutes) => {
@@ -69,13 +79,10 @@ export default class StatusScreen extends React.Component {
 
   render() {
     const { params } = this.props.navigation.state;
-
-    console.log("params");
-    console.log(params);
-
     const { navigate } = this.props.navigation;
+
     const distMeters = geolib.getDistance(
-      {latitude: params.loclat, longitude: params.loclong},
+      {latitude: this.state.myLat, longitude: this.state.myLong},
       {latitude: params.latitude, longitude: params.longitude}
     );
 
@@ -103,6 +110,9 @@ export default class StatusScreen extends React.Component {
 
     
     const miles = distMeters * 0.00062137;
+
+    console.log("--------------------");
+    console.log(this.state.myLat, this.state.myLong);
 
     return (
         <View style={styles.container}>
