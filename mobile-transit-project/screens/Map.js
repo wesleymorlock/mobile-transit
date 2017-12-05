@@ -114,15 +114,6 @@ class MapPage extends React.Component {
     SELECTION.choice.loclong = this.state.longitude;
     SELECTION.choice.location = marker.title;
 
-    FavoritedStations.stationList.stations.push({
-      location: SELECTION.choice.location,
-      latitude: SELECTION.choice.latitude,
-      longitude: SELECTION.choice.longitude,
-      ETA: SELECTION.choice.ETA,
-      loclong: SELECTION.choice.loclong,
-      loclat: SELECTION.choice.loclat,
-    });
-
     this.props.navigation.navigate(
       'Destination',
       {

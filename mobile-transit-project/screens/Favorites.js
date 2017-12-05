@@ -9,8 +9,19 @@ import {
 
 import { FavoritedStations } from '../globals/FavoritedStations';
 import { SELECTION } from '../globals/Selection';
+import * as firebase from 'firebase';
 
 export default class FavoritesScreen extends React.Component {
+  state = {
+    stations: "",
+    ETA: "",
+    loclat: "",
+    loclong: "",
+    latitude: "",
+    longitude: "",
+    location: "",
+    attrs: "",
+  }
 
   constructor() {
     super();
@@ -20,33 +31,40 @@ export default class FavoritesScreen extends React.Component {
     title: 'Favorites',
   };
 
-  onTap = (obj) => {
+  componentDidMount() {
+    return fetch('https://mobile-transit-bbdf3.firebaseio.com/favorites.json?shallow=true')
+      .then(result => result.json())
+      .then(resultJSON => {
+        this.setState({stations: resultJSON});
+        return (resultJSON);
+      }).done();
+  }
 
-    this.props.navigation.navigate(
-      'Status', { 
-        ETA: obj.item.ETA,
-        loclat: obj.item.loclat,
-        loclong: obj.item.loclong,
-        latitude: obj.item.latitude,
-        longitude: obj.item.longitude,
-        location: obj.item.location,
-      }
-    );
-  };
+
+  onTap = async (obj) => {
+    this.props.navigation.navigate('Status', {
+      location: obj.item,
+    });
+  }
 
   render() {
+    var stationList = [];
+    for (var key  in this.state.stations) {
+      stationList.push(key);
+    }
+
     return (
-        <View style={styles.container}>
-          <Text style={ styles.headerText }>Favorites:</Text>
-          <FlatList 
-            style={styles.tblRows}
-            data={FavoritedStations.stationList.stations}
-            renderItem={({item}) => <Button 
-              style={ styles.rowText }
-              title={item.location}
-              ref={component => this._stationBtn = component}
-              onPress={() => this.onTap({item})}> </Button>} />
-        </View>
+      <View style={styles.container}>
+        <Text style={ styles.headerText }>Favorites:</Text>
+        <FlatList 
+          style={styles.tblRows}
+          data={stationList}
+          renderItem={({item}) => <Button 
+            style={ styles.rowText }
+            title={item}
+            ref={component => this._stationBtn = component}
+            onPress={() => this.onTap({item})}> </Button>} />
+      </View>
     );
   }
 }

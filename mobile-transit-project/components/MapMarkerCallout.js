@@ -10,6 +10,7 @@ export default class MapMarkerCallout extends Component {
         </Text>
         <Button 
           title="Select stop"
+          onPress={() => console.log(this.props.title)}
         />
       </View>
     )

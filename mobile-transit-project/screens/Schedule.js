@@ -5,6 +5,7 @@ import {
   View,
   WebView,
   Picker, 
+  Alert,
 } from 'react-native'; 
 
 export default class ScheduleScreen extends React.Component {
@@ -383,9 +384,14 @@ export default class ScheduleScreen extends React.Component {
     }
     else if (value=="78") {
       stationUrl = "http://web.mta.info/lirr/Timetable/Station2/RonkonkomaKO4.pdf";
+    } else {
+      // Alert.alert('Station Not Found.\nPlease try again.');
+      stationUrl = "null";
     };
 
-    return (stationUrl);
+    if (stationUrl != "null"){
+      return (stationUrl);
+    }
   }
 
   render() {

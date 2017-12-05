@@ -7,6 +7,7 @@ import {
   TextInput, 
   Picker,
   Button,
+  Alert,
 } from 'react-native';
 
 import StationPicker from '../components/StationPicker';
@@ -19,6 +20,7 @@ export default class SchedulePickerScreen extends React.Component {
   };
 
   handleSearch = ({ navigate }) => {
+
 
     if (this.state.term === "Albertson") {
       this.props.navigation.navigate("Schedule", { station: "44" })
@@ -270,9 +272,10 @@ export default class SchedulePickerScreen extends React.Component {
       this.props.navigation.navigate('Schedule', { station: "71" })
     } else if (this.state.term == "Yaphank") {
       this.props.navigation.navigate('Schedule', { station: "78" })
+    } else {
+      Alert.alert('Station not found.\nPlease try again.');
     }
 
-    this.props.navigation.navigate("Schedule", { station: this.state.term })
   }
 
   render() {
@@ -285,7 +288,7 @@ export default class SchedulePickerScreen extends React.Component {
           placeholder='Search for a station'
           value={this.state.term}
           onChangeText={term =>  this.setState({ term })} />
-        <Button 
+        <Button
           title="search"
           onPress={() => this.handleSearch(navigate)} />
         <StationPicker ref={(ref) => this._stationPicker = ref}/>

@@ -12,22 +12,12 @@ import * as firebase from 'firebase';
 import { FavoritedStations } from '../globals/FavoritedStations';
 import { SELECTION } from '../globals/Selection';
 
-var config = {
-  apiKey: "AIzaSyAgjVKhNLO0wI4pAh5dtmSQ1DpSsimHH3I",
-  authDomain: "mobile-transit-bbdf3.firebaseapp.com",
-  databaseURL: "https://mobile-transit-bbdf3.firebaseio.com/",
-  projectId: "mobile-transit-bbdf3",
-  storageBucket: "mobile-transit-bbdf3.appspot.com",
-  messagingSenderId: "270559937070"
-};
-firebase.initializeApp(config);
-
-var database = firebase.database();
-
 export default class StatusScreen extends React.Component {
   state = {
     myLat: 0,
     myLong: 0,
+    latitude: 0,
+    longitude: 0,
   } 
 
   static navigationOptions = ({ navigation }) => ({
@@ -40,18 +30,21 @@ export default class StatusScreen extends React.Component {
   constructor() {
     super();
 
+  }
+
+  componentDidMount() {
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.setState({myLat: position.coords.latitude});
         this.setState({myLong: position.coords.longitude});
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
+    );    
   }
 
   addToFavorites = (location, latitude, longitude) => {
-
-    // var exists = false;
+    location = location.replace(' ', '_')
 
     for (i = 0; i < FavoritedStations.stationList.stations.length; i++) { 
       if (location == FavoritedStations.stationList.stations[i].location){
@@ -71,6 +64,7 @@ export default class StatusScreen extends React.Component {
   }
 
   calcETA = (distance) => {
+    distance = distance / 60;
     var speed = 40;
     return(distance / speed);
   }
@@ -80,7 +74,7 @@ export default class StatusScreen extends React.Component {
 
     if (minutes > 59) {
       var hrs = Math.floor(minutes / 60);
-      var mins = (minutes % 60);
+      var mins = Math.round(minutes % 60);
       var hourStr = hrs.toString() + (hrs == 1 ? " hour" : " hours");
       returnStr += hourStr;
 
@@ -95,17 +89,12 @@ export default class StatusScreen extends React.Component {
     return (returnStr)
   }
 
-  render() {
+  render = () => {
     const { params } = this.props.navigation.state;
     const { navigate } = this.props.navigation;
-    var ETA = 0;
 
-    const distMeters = geolib.getDistance(
-      {latitude: this.state.myLat, longitude: this.state.myLong},
-      {latitude: params.latitude, longitude: params.longitude}
-    );
-
-    ETA = this.calcETA(distMeters);
+    const stations = FavoritedStations.stationList.stations;
+    const title = this.props.navigation.state.params.location.replace(' ', '_');
 
     var station_image = null
     var name = params.location;
@@ -129,10 +118,12 @@ export default class StatusScreen extends React.Component {
       station_image = <Image style={styles.img} source={require("../assets/images/Port Washington.jpg")}/>;
     }
     
+    const distMeters = geolib.getDistance(
+       {latitude: this.state.myLat, longitude: this.state.myLong},
+       {latitude: stations[title][0], longitude: stations[title][1]}
+    );
     const miles = distMeters * 0.00062137;
-
-    console.log("-----");
-    console.log(ETA);
+    const ETA = this.calcETA(distMeters);
 
     return (
         <View style={styles.container}>
