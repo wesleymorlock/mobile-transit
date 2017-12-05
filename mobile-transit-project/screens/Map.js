@@ -92,6 +92,20 @@ class MapPage extends React.Component {
           },
           title: 'Auburndale',
         },
+        Bucknell = {
+          latlng: {
+            latitude: 40.9547,
+            longitude: -76.8836
+          },
+          title: 'Bucknell'
+        },
+        Test = {
+          latlng: {
+            latitude: 40.9552,
+            longitude: -76.8842
+          },
+          title: 'Test'
+        },
       ]
     }
   }
@@ -139,8 +153,10 @@ class MapPage extends React.Component {
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: 40.7966,
-            longitude: -73.7494,
+            latitude: 40.7966, // LI
+            longitude: -73.7494, // LI
+            // latitude: 40.9550, // Bucknell
+            // longitude: -76.8840, // Bucknell
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}

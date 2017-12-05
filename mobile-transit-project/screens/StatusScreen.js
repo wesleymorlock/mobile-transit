@@ -121,6 +121,8 @@ export default class StatusScreen extends React.Component {
     } else {
       station_image = <Image style={styles.img} source={require("../assets/images/PortWashington.jpg")}/>;
     }
+
+    
     
     const distMeters = geolib.getDistance(
        {latitude: this.state.myLat, longitude: this.state.myLong},
@@ -128,6 +130,10 @@ export default class StatusScreen extends React.Component {
     );
     const miles = distMeters * 0.00062137;
     const ETA = this.calcETA(distMeters);
+
+    if(ETA == 0) {
+      Alert.alert('arrived!');
+    }
 
     return (
         <View style={styles.container}>
