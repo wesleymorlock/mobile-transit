@@ -285,10 +285,12 @@ export default class SchedulePickerScreen extends React.Component {
       <View style={styles.container}>
         <Text style={styles.menuTxt} >Choose a station:</Text>
         <TextInput 
+          style={styles.inputField}
           placeholder='Search for a station'
           value={this.state.term}
           onChangeText={term =>  this.setState({ term })} />
         <Button
+          style={styles.searchBtn}
           title="search"
           onPress={() => this.handleSearch(navigate)} />
         <StationPicker ref={(ref) => this._stationPicker = ref}/>
@@ -307,6 +309,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#abcdef',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  inputField: {
+    paddingTop: 30,
+  },
+
+  searchBtn: {
+    paddingBottom: 40,
+    fontSize: 30,
   },
 
   menuTxt: {
