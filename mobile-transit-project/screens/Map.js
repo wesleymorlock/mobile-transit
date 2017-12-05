@@ -17,6 +17,11 @@ import { SELECTION } from '../globals/Selection';
 import { FavoritedStations } from '../globals/FavoritedStations';
 
 class MapPage extends React.Component {
+  state = {
+    myLocLat: 0,
+    myLocLong: 0,
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -94,11 +99,9 @@ class MapPage extends React.Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        SELECTION.choice.latitude = position.coords.latitude;
-        SELECTION.choice.longitude = position.coords.latitude;
         this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          myLocLat: position.coords.latitude,
+          myLocLong: position.coords.longitude,
           error: null,
         });
       },
@@ -127,6 +130,10 @@ class MapPage extends React.Component {
   }
 
   render() {
+    console.log(SELECTION.choice);
+    var loclat = SELECTION.choice.loclat;
+    var loclong = SELECTION.choice.loclong;
+
     return (
       <View style={styles.container}>
         <MapView
@@ -138,6 +145,19 @@ class MapPage extends React.Component {
             longitudeDelta: 0.0421,
           }}
         >
+        <MapView.Marker
+              key="curr-loc"
+              coordinate={ {latitude: this.state.myLocLat, longitude: this.state.myLocLong } }
+              pinColor='blue'
+            >
+              <MapView.Callout
+                onPress={() => this.setSelection(marker) }>
+                <MapMarkerCallout
+                  title="Current Location"
+                  description="You are here"
+                />
+              </MapView.Callout>
+            </MapView.Marker>
         { this.state.markers.map((marker, index) => (
             <MapView.Marker
               key={index}
@@ -180,16 +200,6 @@ const AppNavigation = StackNavigator({
 export default class MapScreen extends React.Component{
   static navigationOptions = ({ navigation }) => ({
     title: 'Map',
-    headerRight: <Button 
-      title="Info"
-      onPress={() => navigation.navigate('Destination', { 
-        ETA: SELECTION.choice.ETA,
-        location: SELECTION.choice.location,
-        loclat: SELECTION.choice.loclat,
-        loclong: SELECTION.choice.loclong,
-        latitude: SELECTION.choice.latitude,
-        longitude: SELECTION.choice.longitude,
-       })} />
   });
   
   render() {

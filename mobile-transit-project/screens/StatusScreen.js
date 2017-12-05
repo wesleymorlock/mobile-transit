@@ -52,15 +52,19 @@ export default class StatusScreen extends React.Component {
       }
     }
 
-    firebase.database().ref('favorites/' + location).set({
-      station: location,
-      lat: latitude,
-      lon: longitude
-    });
-
-    Alert.alert(
+    try {
+      firebase.database().ref('favorites/' + location).set({
+        station: location,
+        lat: latitude,
+        lon: longitude
+      });
+      Alert.alert(
         'Added to Favorites'
-      )
+      );
+    }
+    catch(e) {
+      Alert.alert('Already in Favorites');
+    }
   }
 
   calcETA = (distance) => {
@@ -105,17 +109,17 @@ export default class StatusScreen extends React.Component {
     } else if (name == "Douglaston") {
       station_image = <Image style={styles.img} source={require("../assets/images/Douglaston.jpg")}/>;
     } else if (name == "Great Neck") {
-      station_image = <Image style={styles.img} source={require("../assets/images/Great Neck.jpg")}/>;
+      station_image = <Image style={styles.img} source={require("../assets/images/GreatNeck.jpg")}/>;
     } else if (name == "Little Neck") {
-      station_image = <Image style={styles.img} source={require("../assets/images/Little Neck.jpg")}/>;
+      station_image = <Image style={styles.img} source={require("../assets/images/LittleNeck.jpg")}/>;
     } else if (name == "Manhasset") {
       station_image = <Image style={styles.img} source={require("../assets/images/Manhasset.jpg")}/>;
     } else if (name == "Plandome") {
       station_image = <Image style={styles.img} source={require("../assets/images/Plandome.jpg")}/>;
     } else if (name == "Port Washington") {
-      station_image = <Image style={styles.img} source={require("../assets/images/Port Washington.jpg")}/>;
+      station_image = <Image style={styles.img} source={require("../assets/images/PortWashington.jpg")}/>;
     } else {
-      station_image = <Image style={styles.img} source={require("../assets/images/Port Washington.jpg")}/>;
+      station_image = <Image style={styles.img} source={require("../assets/images/PortWashington.jpg")}/>;
     }
     
     const distMeters = geolib.getDistance(
